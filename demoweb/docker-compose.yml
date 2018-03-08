@@ -1,0 +1,9 @@
+version: "2"
+services:
+  web:
+    build:
+        context: .
+    image: binblee/springboot-helm-chart
+    ports:
+      - 8080
+    restart: always
