@@ -12,7 +12,7 @@ service:
   externalPort: 8080
   internalPort: 8080
 ingress:
-  enabled: false
+  enabled: true
   # Used to create an Ingress record.
   hosts:
     - chart-example.local

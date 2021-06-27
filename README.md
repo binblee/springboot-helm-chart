@@ -50,7 +50,7 @@ Deploy application using helm.
 
 ```
 cd demoweb/charts
-helm install -n springboot-demo springboot-demoweb/
+helm upgrade demo -n springboot-demoweb ./springboot-demoweb/ 
 ```
 
 
