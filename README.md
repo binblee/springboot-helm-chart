@@ -2,8 +2,8 @@
 
 
 Update 2021/9/6:
-springboot: 2.3.12
-helm template updated for Kubernetes 1.19 
+- springboot: 2.3.12
+- helm template updated for Kubernetes 1.19 
 
 ## Build and push docker image
 
