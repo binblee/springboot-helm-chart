@@ -1,5 +1,10 @@
 # Spring Boot Application Helm Chart Example
 
+
+Update 2021/9/6:
+springboot: 2.3.12
+helm template updated for Kubernetes 1.19 
+
 ## Build and push docker image
 
 Rename ```image``` in demoweb/docker-compose.yml.
@@ -50,7 +55,7 @@ Deploy application using helm.
 
 ```
 cd demoweb/charts
-helm upgrade demo -n springboot-demoweb ./springboot-demoweb/ 
+helm install demo -n springboot-demoweb ./springboot-demoweb/ 
 ```
 
 
