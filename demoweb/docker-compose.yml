@@ -3,7 +3,7 @@ services:
   web:
     build:
         context: .
-    image: binblee/springboot-helm-chart
+    image: binblee/springboot-helm-chart:jre-17
     ports:
-      - 8080
+      - 8080:8080
     restart: always

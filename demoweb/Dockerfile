@@ -1,17 +1,25 @@
+# syntax=docker/dockerfile:1
+
 #
 # Build image
 #
-FROM maven:3.5.2-jdk-9 AS build
+FROM eclipse-temurin:17-jdk-jammy AS build
 
-COPY src /usr/src/app/src
-COPY pom.xml /usr/src/app
-RUN mvn -f /usr/src/app/pom.xml clean package -Djavax.net.ssl.trustStorePassword=changeit
+WORKDIR /app
+
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:resolve
+
+COPY src ./src
+
+RUN ./mvnw clean package
 
 #
 # Image
 #
-FROM openjdk:9-jre
-COPY --from=build /usr/src/app/target/*.jar /app.jar
+FROM eclipse-temurin:17-jre
+COPY --from=build /app/target/*.jar /app.jar
 
 ENV JAVA_OPTS=""
 ENV SERVER_PORT 8080
