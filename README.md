@@ -1,5 +1,9 @@
 # Spring Boot Application Helm Chart Example
 
+Update 11/28/2022:
+- springboot 3.0
+- java 19
+
 Update 10/20/2022:
 - springboot version: 2.7.4
 - java version: 17
