@@ -3,7 +3,7 @@
 #
 # Build image
 #
-FROM eclipse-temurin:17-jdk-jammy AS build
+FROM eclipse-temurin:19-jdk-jammy AS build
 
 WORKDIR /app
 
@@ -18,7 +18,7 @@ RUN ./mvnw clean package
 #
 # Image
 #
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:19-jre
 COPY --from=build /app/target/*.jar /app.jar
 
 ENV JAVA_OPTS=""

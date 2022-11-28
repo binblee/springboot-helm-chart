@@ -8,7 +8,7 @@ image:
   repository: binblee/springboot-helm-chart
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "jre-17"
+  tag: "jre-19"
 
 imagePullSecrets: []
 nameOverride: ""
