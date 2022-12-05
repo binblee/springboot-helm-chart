@@ -22,7 +22,6 @@ FROM eclipse-temurin:19-jre
 COPY --from=build /app/target/*.jar /app.jar
 
 ENV JAVA_OPTS=""
-ENV SERVER_PORT 8080
 
 EXPOSE ${SERVER_PORT}
 

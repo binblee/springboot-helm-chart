@@ -59,6 +59,21 @@ Also to be noted that a native plugin is added to [demoweb/pom.xml](demoweb/pom.
 </plugin>
 ```
 
+You can up and run two images with one command:
+```
+➜ cd demoweb
+➜ docker compose up -d
+```
+
+You should get two healthy containers:
+```
+NAME                    COMMAND                  SERVICE             STATUS              PORTS
+demoweb-web-1           "sh -c 'java $JAVA_O…"   web                 running (healthy)   0.0.0.0:8080->8080/tcp
+demoweb-web-graalvm-1   "/demoweb"               web-graalvm         running (healthy)   0.0.0.0:8888->8888/tcp
+```
+
+Test JVM version with [http://localhost:8080](http://localhost:8080), while GraalVM version with [http://localhost:8888](http://localhost:8888)
+
 
 ## Deploy using helm
 
