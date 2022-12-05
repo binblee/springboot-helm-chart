@@ -2,7 +2,7 @@
 
 ## Build docker image (JVM)
 
-Rename ```image``` in demoweb/docker-compose.yml.
+Rename ```image``` in [demoweb/docker-compose.yml](demoweb/docker-compose.yml).
 
 ```yaml
 build:
@@ -13,26 +13,31 @@ image: binblee/springboot-helm-chart:jre-17
 Build docker image use docker-compose command.
 
 ```
-cd demoweb
-docker compose build
-docker push xxxx
+➜ cd demoweb
+➜ docker compose build
+➜ docker push xxxx
 ```
 
 Unit test:
 ```
-cd demoweb
-docker compose up
+➜ cd demoweb
+➜ docker compose up -d web
 ```
 
 Visit http://localhost:8080/ you should get 'Hello World.'
 
+Shut it down:
+```
+➜ docker compose down
+```
 
-If you prefer classic docker command line:
+
+If you prefer to use docker to build image:
 
 ```
-cd demoweb
-docker build -t xxxx .
-docker push xxxx
+➜ cd demoweb
+➜ docker build -t xxxx .
+➜ docker push xxxx
 ```
 
 ## Build docker image (GraalVM)
@@ -40,13 +45,13 @@ docker push xxxx
 Springboot 3.0 supports build native exectuable using GraalVM, we can leverage this feature to build a native executable docker image. 
 
 ```
-cd demoweb
-docker compose build web-graalvm
+➜ cd demoweb
+➜ docker compose build web-graalvm
 ```
 
-[docker-compose.yml](docker-compose.yml) has all the details: native docker image is built with another Dockerfile: [Dockerfile.graalvm](Dockerfile.graalvm).
+[demoweb/docker-compose.yml](demoweb/docker-compose.yml) will tell you that native docker image is built with another Dockerfile: [demoweb/Dockerfile.graalvm](demoweb/Dockerfile.graalvm).
 
-Also to be noted that a native plugin is added to [pom.xml](pom.xml)
+Also to be noted that a native plugin is added to [demoweb/pom.xml](demoweb/pom.xml)
 ```
 <plugin>
   <groupId>org.graalvm.buildtools</groupId>
@@ -57,7 +62,7 @@ Also to be noted that a native plugin is added to [pom.xml](pom.xml)
 
 ## Deploy using helm
 
-Rename image ```image.repository``` and ```tag``` in [demoweb/charts/values.yaml](demoweb/charts/values.yaml) with your image name and tag.
+Rename image ```image.repository``` and ```tag``` in [demoweb/charts/springboot-demoweb/values.yaml](demoweb/charts/springboot-demoweb/values.yaml) with your image name and tag.
 
 ```yaml
 image:
@@ -75,8 +80,8 @@ You should have a running Kubernetes cluster and [helm installed](https://docs.h
 Deploy application using helm.
 
 ```
-cd demoweb/charts
-helm install demo ./springboot-demoweb/ 
+➜ cd demoweb/charts
+➜ helm install demo ./springboot-demoweb/ 
 ```
 
 Run port-forward and test it:
@@ -88,7 +93,7 @@ You should see "Hello World."
 
 Uninstall demo application in cluster:
 ```
-helm uninstall demo
+➜ helm uninstall demo
 ```
 
 ## JVM image vs GraalVM image
