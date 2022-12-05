@@ -3,7 +3,7 @@
 #
 # Build image
 #
-FROM eclipse-temurin:19-jdk-jammy AS build
+FROM ghcr.io/graalvm/graalvm-ce:ol9-java17-22.3.0 AS build
 
 WORKDIR /app
 
@@ -13,20 +13,23 @@ RUN ./mvnw dependency:resolve
 
 COPY src ./src
 
-RUN ./mvnw clean package
+RUN gu install native-image
+RUN gu list
+
+RUN ./mvnw -Pnative native:compile
 
 #
 # Image
 #
-FROM eclipse-temurin:19-jre
-COPY --from=build /app/target/*.jar /app.jar
+FROM alpine:3
+RUN apk add gcompat
 
-ENV JAVA_OPTS=""
+COPY --from=build /app/target/demoweb /demoweb
+
 ENV SERVER_PORT 8080
-
 EXPOSE ${SERVER_PORT}
 
 HEALTHCHECK --interval=10s --timeout=3s \
 CMD curl -v --fail http://localhost:${SERVER_PORT} || exit 1
 
-ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -jar /app.jar" ]
+ENTRYPOINT [ "/demoweb" ]

@@ -3,7 +3,17 @@ services:
   web:
     build:
         context: .
-    image: binblee/springboot-helm-chart:jre-19
+    image: binblee/springboot-helm-chart:jre-17
     ports:
       - 8080:8080
     restart: always
+  web-graalvm:
+    build:
+        context: .
+        dockerfile: ./Dockerfile.graalvm
+    image: binblee/springboot-helm-chart:graalvm-22.3-java17
+    ports:
+      - 8888:8888
+    restart: always
+    environment:
+      - SERVER_PORT=8888

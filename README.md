@@ -1,20 +1,6 @@
 # Spring Boot Application Helm Chart Example
 
-Update 11/28/2022:
-- springboot 3.0
-- java 19
-
-Update 10/20/2022:
-- springboot version: 2.7.4
-- java version: 17
-- helm template updated
-
-
-Update 2021/9/6:
-- springboot: 2.3.12
-- helm template updated for Kubernetes 1.19 
-
-## Build and push docker image
+## Build docker image (JVM)
 
 Rename ```image``` in demoweb/docker-compose.yml.
 
@@ -49,17 +35,36 @@ docker build -t xxxx .
 docker push xxxx
 ```
 
+## Build docker image (GraalVM)
+
+Springboot 3.0 supports build native exectuable using GraalVM, we can leverage this feature to build a native executable docker image. 
+
+```
+cd demoweb
+docker compose build web-graalvm
+```
+
+[docker-compose.yml](docker-compose.yml) has all the details: native docker image is built with another Dockerfile: [Dockerfile.graalvm](Dockerfile.graalvm).
+
+Also to be noted that a native plugin is added to [pom.xml](pom.xml)
+```
+<plugin>
+  <groupId>org.graalvm.buildtools</groupId>
+  <artifactId>native-maven-plugin</artifactId>
+</plugin>
+```
 
 
 ## Deploy using helm
 
-Rename image ```image.repository``` and ```tag``` in demoweb/charts/values.yaml.
+Rename image ```image.repository``` and ```tag``` in [demoweb/charts/values.yaml](demoweb/charts/values.yaml) with your image name and tag.
 
 ```yaml
 image:
   repository: binblee/springboot-helm-chart
-  tag: jre-17
+  tag: graalvm-22.3-java17
 ```
+
 
 
 
@@ -74,18 +79,25 @@ cd demoweb/charts
 helm install demo ./springboot-demoweb/ 
 ```
 
-Access demo application following NOTES:
+Run port-forward and test it:
 ```
-NOTES:
-1. Get the application URL by running these commands:
-  export POD_NAME=$(kubectl get pods --namespace default -l "app.kubernetes.io/name=springboot-demoweb,app.kubernetes.io/instance=demo" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace default $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace default port-forward $POD_NAME 8080:$CONTAINER_PORT
+➜ kubectl port-forward service/demo-springboot-demoweb 8080:80
+➜ curl http://localhost:8080
 ```
+You should see "Hello World."
 
 Uninstall demo application in cluster:
 ```
 helm uninstall demo
 ```
 
+## JVM image vs GraalVM image
+
+We have two docker images now, one is build with JVM, the other one is build with graalvm native-image. Size of native exectuable image is about 1/3 of the classic JVM one. Quite impressive.
+
+```
+springboot-helm-chart:jre-17         294MB
+springboot-helm-chart:graalvm-22.3   78.9MB
+```
+
+For more details, please refer to [https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image)
